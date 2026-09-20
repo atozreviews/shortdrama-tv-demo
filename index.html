@@ -1,202 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="ShortDrama TV — vertical short drama streaming demo">
 <title>ShortDrama TV</title>
-
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
-body{overflow:hidden}
-
-header{
-position:fixed;
-top:0;
-left:0;
-right:0;
-z-index:10;
-padding:18px 20px;
-font-size:22px;
-font-weight:900;
-letter-spacing:2px;
-background:linear-gradient(#000b,transparent)
-}
-
-.feed{
-height:100vh;
-overflow-y:auto;
-scroll-snap-type:y mandatory;
-}
-
-.drama{
-height:100vh;
-position:relative;
-scroll-snap-align:start;
-background:#111;
-}
-
-.drama video{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.info{
-position:absolute;
-left:20px;
-right:20px;
-bottom:85px;
-z-index:5;
-text-shadow:0 2px 12px #000;
-}
-
-.series{
-font-size:15px;
-font-weight:bold;
-color:#ddd;
-}
-
-.title{
-font-size:30px;
-font-weight:900;
-margin:7px 0;
-}
-
-.episode{
-font-size:14px;
-color:#ddd;
-}
-
-.buttons{
-position:absolute;
-right:18px;
-bottom:130px;
-display:flex;
-flex-direction:column;
-gap:18px;
-font-size:25px;
-text-align:center;
-}
-
-.buttons span{
-background:#0008;
-width:48px;
-height:48px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.bottom{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-height:62px;
-z-index:20;
-background:#111e;
-display:flex;
-justify-content:space-around;
-align-items:center;
-font-size:12px;
-}
-
-.bottom div{
-text-align:center;
-}
-
-.bottom b{
-display:block;
-font-size:20px;
-margin-bottom:3px;
-}
+:root{--bg:#050505;--muted:#aaa;--accent:#ff3158}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);color:#fff;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{overflow:hidden}button{font:inherit;color:inherit;border:0}
+.top{position:fixed;top:0;left:0;right:0;height:72px;z-index:50;padding:18px;background:linear-gradient(#000d,transparent);pointer-events:none}
+.logo{font-size:22px;font-weight:950;letter-spacing:2px}
+.feed{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior-y:contain;scrollbar-width:none}
+.feed::-webkit-scrollbar{display:none}.card{height:100dvh;min-height:560px;position:relative;scroll-snap-align:start;background:#151515;overflow:hidden}
+.video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#151515}
+.videoShade{position:absolute;inset:0;background:linear-gradient(180deg,#0007 0%,transparent 24%,transparent 48%,#000b 100%);pointer-events:none}
+.loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52px;height:52px;border:4px solid #ffffff33;border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;z-index:3}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}.error{position:absolute;left:24px;right:24px;top:50%;transform:translateY(-50%);text-align:center;color:#ddd;display:none;z-index:4}
+.error b{display:block;font-size:18px;margin-bottom:6px}.info{position:absolute;left:18px;right:88px;bottom:92px;z-index:8;text-shadow:0 2px 16px #000}
+.series{font-size:14px;font-weight:800;letter-spacing:1px;color:#ddd}.title{font-size:31px;line-height:1.08;font-weight:900;margin:6px 0 7px}.episode{font-size:13px;color:#ddd}
+.actions{position:absolute;right:14px;bottom:135px;z-index:12;display:flex;flex-direction:column;gap:14px}
+.action{width:50px;height:50px;border-radius:50%;background:#000a;display:grid;place-items:center;font-size:25px;cursor:pointer;backdrop-filter:blur(5px)}
+.action:active{transform:scale(.92)}.action.liked{color:var(--accent)}
+.sound{position:absolute;right:18px;top:76px;z-index:12}.sound .action{width:44px;height:44px;font-size:19px}
+.progress{position:absolute;left:18px;right:18px;bottom:75px;height:3px;background:#ffffff44;border-radius:9px;z-index:20;overflow:hidden}.progress i{display:block;width:0;height:100%;background:#fff}
+.tapHint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;background:#000b;border-radius:99px;padding:11px 16px;font-size:13px;opacity:0;pointer-events:none;transition:.25s}.tapHint.show{opacity:1}
+.bottom{position:fixed;left:0;right:0;bottom:0;height:68px;padding-bottom:env(safe-area-inset-bottom);z-index:40;background:#090909ee;border-top:1px solid #ffffff12;display:grid;grid-template-columns:repeat(4,1fr);backdrop-filter:blur(12px)}
+.nav{background:none;text-align:center;font-size:11px;color:#aaa;cursor:pointer}.nav b{display:block;font-size:20px;line-height:28px;color:#fff}.nav.active{color:#fff}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#fff;color:#111;padding:10px 15px;border-radius:999px;font-size:13px;font-weight:700;z-index:100;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1}
+@media(min-width:700px){.card{max-width:430px;margin:auto}.top{max-width:430px;left:50%;right:auto;width:430px;transform:translateX(-50%)}.bottom{max-width:430px;left:50%;right:auto;width:430px;transform:translateX(-50%)}}
 </style>
 </head>
-
 <body>
-
-<header>SHORTDRAMA</header>
-
-<div class="feed">
-
-<section class="drama">
-<video
-src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-playsinline
-muted
-loop
-controls>
-</video>
-
-<div class="info">
-<div class="series">HIDDEN LOVE</div>
-<div class="title">The Secret Letter</div>
-<div class="episode">Episode 01 • Demo</div>
-</div>
-
-<div class="buttons">
-<span>♡</span>
-<span>↗</span>
-<span>⋮</span>
-</div>
+<header class="top"><div class="logo">SHORTDRAMA</div></header>
+<main class="feed" id="feed">
+<section class="card" data-id="hidden-love">
+<video class="video" preload="metadata" playsinline muted loop src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"></video>
+<div class="loading"></div><div class="videoShade"></div><div class="error"><b>Demo video unavailable</b><span>Tap to try again.</span></div><div class="tapHint">▶ Playing</div>
+<div class="sound"><button class="action mute" aria-label="Sound">🔇</button></div>
+<div class="info"><div class="series">HIDDEN LOVE</div><div class="title">The Secret Letter</div><div class="episode">Episode 01 • Demo</div></div>
+<div class="actions"><button class="action like" aria-label="Like">♡</button><button class="action share" aria-label="Share">↗</button><button class="action save" aria-label="Save">＋</button></div><div class="progress"><i></i></div>
 </section>
-
-
-<section class="drama">
-<video
-src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
-playsinline
-muted
-loop
-controls>
-</video>
-
-<div class="info">
-<div class="series">SECOND CHANCE</div>
-<div class="title">One More Chance</div>
-<div class="episode">Episode 01 • Demo</div>
-</div>
-
-<div class="buttons">
-<span>♡</span>
-<span>↗</span>
-<span>⋮</span>
-</div>
+<section class="card" data-id="second-chance">
+<video class="video" preload="metadata" playsinline muted loop src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"></video>
+<div class="loading"></div><div class="videoShade"></div><div class="error"><b>Demo video unavailable</b><span>Tap to try again.</span></div><div class="tapHint">▶ Playing</div>
+<div class="sound"><button class="action mute" aria-label="Sound">🔇</button></div>
+<div class="info"><div class="series">SECOND CHANCE</div><div class="title">One More Chance</div><div class="episode">Episode 01 • Demo</div></div>
+<div class="actions"><button class="action like" aria-label="Like">♡</button><button class="action share" aria-label="Share">↗</button><button class="action save" aria-label="Save">＋</button></div><div class="progress"><i></i></div>
 </section>
-
-
-<section class="drama">
-<video
-src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
-playsinline
-muted
-loop
-controls>
-</video>
-
-<div class="info">
-<div class="series">BROKEN PROMISE</div>
-<div class="title">The Last Promise</div>
-<div class="episode">Episode 01 • Demo</div>
-</div>
-
-<div class="buttons">
-<span>♡</span>
-<span>↗</span>
-<span>⋮</span>
-</div>
+<section class="card" data-id="broken-promise">
+<video class="video" preload="metadata" playsinline muted loop src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"></video>
+<div class="loading"></div><div class="videoShade"></div><div class="error"><b>Demo video unavailable</b><span>Tap to try again.</span></div><div class="tapHint">▶ Playing</div>
+<div class="sound"><button class="action mute" aria-label="Sound">🔇</button></div>
+<div class="info"><div class="series">BROKEN PROMISE</div><div class="title">The Last Promise</div><div class="episode">Episode 01 • Demo</div></div>
+<div class="actions"><button class="action like" aria-label="Like">♡</button><button class="action share" aria-label="Share">↗</button><button class="action save" aria-label="Save">＋</button></div><div class="progress"><i></i></div>
 </section>
-
-</div>
-
-<div class="bottom">
-<div><b>⌂</b>Home</div>
-<div><b>🔥</b>Trending</div>
-<div><b>♡</b>Library</div>
-<div><b>☻</b>Profile</div>
-</div>
-
+</main>
+<nav class="bottom">
+<button class="nav active" data-nav="home"><b>⌂</b>Home</button><button class="nav" data-nav="trending"><b>🔥</b>Trending</button><button class="nav" data-nav="library"><b>♡</b>Library</button><button class="nav" data-nav="profile"><b>●</b>Profile</button>
+</nav><div class="toast" id="toast"></div>
+<script>
+const feed=document.getElementById('feed'),toast=document.getElementById('toast'),cards=[...document.querySelectorAll('.card')];
+const getSet=k=>new Set(JSON.parse(localStorage.getItem(k)||'[]')),saveSet=(k,s)=>localStorage.setItem(k,JSON.stringify([...s]));
+const likes=getSet('sdtv_likes'),saves=getSet('sdtv_saves');
+function showToast(t){toast.textContent=t;toast.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>toast.classList.remove('show'),1500)}
+function pauseOthers(current){cards.forEach(c=>{if(c!==current)c.querySelector('video').pause()})}
+function playCard(card){const v=card.querySelector('video');pauseOthers(card);v.play().catch(()=>{});const h=card.querySelector('.tapHint');h.textContent='▶ Playing';h.classList.add('show');setTimeout(()=>h.classList.remove('show'),500)}
+cards.forEach(card=>{
+ const v=card.querySelector('video'),loading=card.querySelector('.loading'),err=card.querySelector('.error'),bar=card.querySelector('.progress i'),like=card.querySelector('.like'),save=card.querySelector('.save');
+ if(likes.has(card.dataset.id)){like.classList.add('liked');like.textContent='♥'} if(saves.has(card.dataset.id))save.textContent='✓';
+ v.addEventListener('loadeddata',()=>loading.style.display='none');v.addEventListener('canplay',()=>loading.style.display='none');v.addEventListener('waiting',()=>loading.style.display='block');v.addEventListener('playing',()=>{loading.style.display='none';err.style.display='none'});v.addEventListener('error',()=>{loading.style.display='none';err.style.display='block'});v.addEventListener('timeupdate',()=>{if(v.duration)bar.style.width=v.currentTime/v.duration*100+'%'});
+ card.addEventListener('click',e=>{if(e.target.closest('button'))return;if(v.paused)playCard(card);else{v.pause();const h=card.querySelector('.tapHint');h.textContent='Ⅱ Paused';h.classList.add('show');setTimeout(()=>h.classList.remove('show'),500)}});
+ like.addEventListener('click',()=>{if(likes.has(card.dataset.id)){likes.delete(card.dataset.id);like.classList.remove('liked');like.textContent='♡'}else{likes.add(card.dataset.id);like.classList.add('liked');like.textContent='♥'}saveSet('sdtv_likes',likes)});
+ save.addEventListener('click',()=>{if(saves.has(card.dataset.id)){saves.delete(card.dataset.id);save.textContent='＋';showToast('Removed from Library')}else{saves.add(card.dataset.id);save.textContent='✓';showToast('Saved to Library')}saveSet('sdtv_saves',saves)});
+ card.querySelector('.share').addEventListener('click',async()=>{try{if(navigator.share)await navigator.share({title:'ShortDrama TV',text:card.querySelector('.title').textContent,url:location.href});else{await navigator.clipboard.writeText(location.href);showToast('Link copied')}}catch(e){}});
+ card.querySelector('.mute').addEventListener('click',e=>{v.muted=!v.muted;e.currentTarget.textContent=v.muted?'🔇':'🔊';showToast(v.muted?'Sound off':'Sound on')});
+});
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.65)playCard(e.target)}),{threshold:[.65]}).observe(cards[0]);
+cards.slice(1).forEach(c=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.65)playCard(e.target)}),{threshold:[.65]}).observe(c));
+document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));n.classList.add('active');const id=n.dataset.nav;if(id==='home')feed.scrollTo({top:0,behavior:'smooth'});else if(id==='trending')showToast('Trending — demo section');else if(id==='library')showToast(saves.size?'Your saved dramas are marked ✓':'No saved dramas yet');else showToast('Profile — coming next')}));
+setTimeout(()=>playCard(cards[0]),300);
+</script>
 </body>
 </html>
