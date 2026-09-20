@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShortDrama TV</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
+body{overflow:hidden}
+
+header{
+position:fixed;
+top:0;
+left:0;
+right:0;
+z-index:10;
+padding:18px 20px;
+font-size:22px;
+font-weight:900;
+letter-spacing:2px;
+background:linear-gradient(#000b,transparent)
+}
+
+.feed{
+height:100vh;
+overflow-y:auto;
+scroll-snap-type:y mandatory;
+}
+
+.drama{
+height:100vh;
+position:relative;
+scroll-snap-align:start;
+background:#111;
+}
+
+.drama video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.info{
+position:absolute;
+left:20px;
+right:20px;
+bottom:85px;
+z-index:5;
+text-shadow:0 2px 12px #000;
+}
+
+.series{
+font-size:15px;
+font-weight:bold;
+color:#ddd;
+}
+
+.title{
+font-size:30px;
+font-weight:900;
+margin:7px 0;
+}
+
+.episode{
+font-size:14px;
+color:#ddd;
+}
+
+.buttons{
+position:absolute;
+right:18px;
+bottom:130px;
+display:flex;
+flex-direction:column;
+gap:18px;
+font-size:25px;
+text-align:center;
+}
+
+.buttons span{
+background:#0008;
+width:48px;
+height:48px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.bottom{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+height:62px;
+z-index:20;
+background:#111e;
+display:flex;
+justify-content:space-around;
+align-items:center;
+font-size:12px;
+}
+
+.bottom div{
+text-align:center;
+}
+
+.bottom b{
+display:block;
+font-size:20px;
+margin-bottom:3px;
+}
+</style>
+</head>
+
+<body>
+
+<header>SHORTDRAMA</header>
+
+<div class="feed">
+
+<section class="drama">
+<video
+src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+playsinline
+muted
+loop
+controls>
+</video>
+
+<div class="info">
+<div class="series">HIDDEN LOVE</div>
+<div class="title">The Secret Letter</div>
+<div class="episode">Episode 01 • Demo</div>
+</div>
+
+<div class="buttons">
+<span>♡</span>
+<span>↗</span>
+<span>⋮</span>
+</div>
+</section>
+
+
+<section class="drama">
+<video
+src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+playsinline
+muted
+loop
+controls>
+</video>
+
+<div class="info">
+<div class="series">SECOND CHANCE</div>
+<div class="title">One More Chance</div>
+<div class="episode">Episode 01 • Demo</div>
+</div>
+
+<div class="buttons">
+<span>♡</span>
+<span>↗</span>
+<span>⋮</span>
+</div>
+</section>
+
+
+<section class="drama">
+<video
+src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+playsinline
+muted
+loop
+controls>
+</video>
+
+<div class="info">
+<div class="series">BROKEN PROMISE</div>
+<div class="title">The Last Promise</div>
+<div class="episode">Episode 01 • Demo</div>
+</div>
+
+<div class="buttons">
+<span>♡</span>
+<span>↗</span>
+<span>⋮</span>
+</div>
+</section>
+
+</div>
+
+<div class="bottom">
+<div><b>⌂</b>Home</div>
+<div><b>🔥</b>Trending</div>
+<div><b>♡</b>Library</div>
+<div><b>☻</b>Profile</div>
+</div>
+
+</body>
+</html>
